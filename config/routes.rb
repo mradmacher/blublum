@@ -3,4 +3,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "articles#index"
+  namespace :admin do
+    get '/frames', to: 'frames#index'
+    post '/frames', to: 'frames#create'
+  end
+
+  namespace :user do
+    get '/frames', to: 'frames#index'
+  end
 end
