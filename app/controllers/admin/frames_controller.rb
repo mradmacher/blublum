@@ -15,6 +15,18 @@ class Admin::FramesController < ApplicationController
   private
 
   def frame_params
-    params.require(:frame).permit(:name, :status, :stock, :description)
+    params.require(:frame).permit(
+      :name,
+      :status,
+      :stock,
+      :description,
+      pricing_attributes: [
+        :usd,
+        :gbp,
+        :eur,
+        :jod,
+        :jpy,
+      ]
+    )
   end
 end

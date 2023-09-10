@@ -44,4 +44,20 @@ class FrameTest < ActiveSupport::TestCase
     frame.valid?
     assert frame.errors.where(:stock, :blank).none?
   end
+
+  test 'requires pricing when active' do
+    frame = Frame.new(name: 'F1', status: Frame::ACTIVE)
+    frame.valid?
+    assert frame.errors.where(:pricing, :blank).any?
+
+    frame.build_pricing(usd: 1, gbp: 1, eur: 1, jod: 1, jpy: 1)
+    frame.valid?
+    assert frame.errors.where(:pricing, :blank).none?
+  end
+
+  test 'does not require pricing when inactive' do
+    frame = Frame.new(name: 'F1', status: Frame::INACTIVE)
+    frame.valid?
+    assert frame.errors.where(:pricing, :blank).none?
+  end
 end

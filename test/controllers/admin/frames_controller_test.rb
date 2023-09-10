@@ -12,7 +12,7 @@ class Admin::FramesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'GET /frames returns active and inactive frames' do
-    Frame.create(name: 'F1', status: Frame::ACTIVE, stock: 1)
+    Frame.create(name: 'F1', status: Frame::ACTIVE, stock: 1, pricing_attributes: { usd: 1, gbp: 2, eur: 3, jod: 4, jpy: 5 })
     Frame.create(name: 'F2', status: Frame::INACTIVE, stock: 1)
 
     get '/admin/frames'
@@ -55,5 +55,34 @@ class Admin::FramesControllerTest < ActionDispatch::IntegrationTest
     assert_equal expected_errors, result['errors']
 
     assert 0, Frame.count
+  end
+
+  test 'POST /frames allows adding pricing' do
+    post '/admin/frames', params: {
+      frame: {
+        name: 'A brand new frame',
+        description: 'This is going to be a success',
+        stock: 1,
+        status: Frame::ACTIVE,
+        pricing_attributes: {
+          usd: 1,
+          gbp: 2,
+          eur: 3,
+          jod: 4,
+          jpy: 5,
+        },
+      }
+    }
+    assert_response :success
+    result = JSON.parse(response.body)
+
+    new_frame = Frame.where(id: result['id']).first
+    refute_nil new_frame
+    refute_nil new_frame.pricing
+    assert_equal 1.0, new_frame.pricing.usd
+    assert_equal 2.0, new_frame.pricing.gbp
+    assert_equal 3.0, new_frame.pricing.eur
+    assert_equal 4.0, new_frame.pricing.jod
+    assert_equal 5.0, new_frame.pricing.jpy
   end
 end

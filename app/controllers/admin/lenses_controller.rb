@@ -15,6 +15,19 @@ class Admin::LensesController < ApplicationController
   private
 
   def lens_params
-    params.require(:lens).permit(:name, :prescription_type, :lens_type, :stock, :description)
+    params.require(:lens).permit(
+      :name,
+      :prescription_type,
+      :lens_type,
+      :stock,
+      :description,
+      pricing_attributes: [
+        :usd,
+        :gbp,
+        :eur,
+        :jod,
+        :jpy,
+      ]
+    )
   end
 end

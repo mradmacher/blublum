@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_09_200237) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_10_041629) do
   create_table "frames", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -28,6 +28,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_09_200237) do
     t.integer "stock"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pricings", force: :cascade do |t|
+    t.float "usd"
+    t.float "gbp"
+    t.float "eur"
+    t.float "jod"
+    t.float "jpy"
+    t.bigint "priceable_id"
+    t.string "priceable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["priceable_id", "priceable_type"], name: "index_pricings_on_priceable_id_and_priceable_type"
   end
 
 end

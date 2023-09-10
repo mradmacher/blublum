@@ -56,4 +56,14 @@ class LensTest < ActiveSupport::TestCase
     lens.valid?
     assert lens.errors.where(:stock, :blank).none?
   end
+
+  test 'requires pricing' do
+    lens = Lens.new
+    lens.valid?
+    assert lens.errors.where(:pricing, :blank).any?
+
+    lens.build_pricing(usd: 1, gbp: 1, eur: 1, jod: 1, jpy: 1)
+    lens.valid?
+    assert lens.errors.where(:pricing, :blank).none?
+  end
 end

@@ -12,8 +12,20 @@ class Admin::LensesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'GET /lenses returns all lenses' do
-    Lens.create(name: 'L1', prescription_type: Lens::FASHION, lens_type: Lens::CLASSIC, stock: 1)
-    Lens.create(name: 'L2', prescription_type: Lens::VARIFOCAL, lens_type: Lens::BLUE_LIGHT, stock: 1)
+    Lens.create(
+      name: 'L1',
+      prescription_type: Lens::FASHION,
+      lens_type: Lens::CLASSIC,
+      stock: 1,
+      pricing_attributes: { usd: 1, gbp: 2, eur: 3, jod: 4, jpy: 5 }
+    )
+    Lens.create(
+      name: 'L2',
+      prescription_type: Lens::VARIFOCAL,
+      lens_type: Lens::BLUE_LIGHT,
+      stock: 1,
+      pricing_attributes: { usd: 1, gbp: 2, eur: 3, jod: 4, jpy: 5 }
+    )
 
     get '/admin/lenses'
     assert_response :success
@@ -31,6 +43,13 @@ class Admin::LensesControllerTest < ActionDispatch::IntegrationTest
         stock: 1,
         prescription_type: Lens::SINGLE_VISION,
         lens_type: Lens::CLASSIC,
+        pricing_attributes: {
+          usd: 1,
+          gbp: 2,
+          eur: 3,
+          jod: 4,
+          jpy: 5,
+        },
       }
     }
     assert_response :success
@@ -43,6 +62,13 @@ class Admin::LensesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, new_lens.stock
     assert_equal Lens::SINGLE_VISION, new_lens.prescription_type
     assert_equal Lens::CLASSIC, new_lens.lens_type
+
+    refute_nil new_lens.pricing
+    assert_equal 1.0, new_lens.pricing.usd
+    assert_equal 2.0, new_lens.pricing.gbp
+    assert_equal 3.0, new_lens.pricing.eur
+    assert_equal 4.0, new_lens.pricing.jod
+    assert_equal 5.0, new_lens.pricing.jpy
   end
 
   test 'POST /lenses returns errors for invalid data' do
@@ -59,7 +85,8 @@ class Admin::LensesControllerTest < ActionDispatch::IntegrationTest
       "Name can't be blank",
       "Prescription type is not included in the list",
       "Lens type is not included in the list",
-      "Stock can't be blank"
+      "Stock can't be blank",
+      "Pricing can't be blank",
     ]
     assert_equal expected_errors, result['errors']
 

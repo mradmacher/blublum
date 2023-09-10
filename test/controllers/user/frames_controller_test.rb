@@ -12,14 +12,14 @@ class User::FramesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'GET /frames returns only active frames' do
-    Frame.create(name: 'F1', status: Frame::ACTIVE, stock: 1)
+    Frame.create(name: 'F1', status: Frame::ACTIVE, stock: 1, pricing_attributes: { usd: 1, gbp: 2, eur: 3, jod: 4, jpy: 5 })
     Frame.create(name: 'F2', status: Frame::INACTIVE, stock: 1)
-    assert 2, Frame.count
+    assert_equal 2, Frame.count
 
     get '/user/frames'
     assert_response :success
     result = JSON.parse(response.body)
-    assert 1, result.size
+    assert_equal 1, result.size
     assert result.any? { |frame| frame['status'] == Frame::ACTIVE }
     assert result.none? { |frame| frame['status'] == Frame::INACTIVE }
   end
