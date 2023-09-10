@@ -41,4 +41,19 @@ class Admin::FramesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, new_frame.stock
     assert_equal Frame::INACTIVE, new_frame.status
   end
+
+  test 'POST /frames returns errors for invalid data' do
+    post '/admin/frames', params: {
+      frame: {
+        status: 1000
+      }
+    }
+    assert_response :unprocessable_entity
+    result = JSON.parse(response.body)
+    refute_predicate result, :empty?
+    expected_errors = ["Name can't be blank", "Status is not included in the list", "Stock can't be blank"]
+    assert_equal expected_errors, result['errors']
+
+    assert 0, Frame.count
+  end
 end

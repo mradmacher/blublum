@@ -10,11 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_09_092329) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_09_200237) do
   create_table "frames", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.integer "status"
+    t.integer "stock"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "lenses", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "lens_type"
+    t.integer "prescription_type"
     t.integer "stock"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

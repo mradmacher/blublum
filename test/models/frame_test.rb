@@ -1,10 +1,6 @@
 require "test_helper"
 
 class FrameTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-
   test 'validates name presence' do
     frame = Frame.new
     refute frame.valid?
@@ -14,7 +10,6 @@ class FrameTest < ActiveSupport::TestCase
     frame.valid?
     assert frame.errors.where(:name, :blank).none?
   end
-
 
   test 'validates status presence' do
     frame = Frame.new

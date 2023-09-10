@@ -8,7 +8,7 @@ class Admin::FramesController < ApplicationController
     if frame.save
       render json: frame
     else
-      render json: frame.errors.full_messages, status: :unprocessable_entity
+      render json: { errors: frame.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
