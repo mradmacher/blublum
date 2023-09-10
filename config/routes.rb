@@ -1,8 +1,4 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
   namespace :admin do
     get '/frames', to: 'frames#index'
     post '/frames', to: 'frames#create'
@@ -13,5 +9,6 @@ Rails.application.routes.draw do
   namespace :user do
     get '/frames', to: 'frames#index'
     get '/lenses', to: 'lenses#index'
+    post '/orders', to: 'orders#create'
   end
 end

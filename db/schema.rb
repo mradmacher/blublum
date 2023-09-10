@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_10_041629) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_10_201134) do
+  create_table "clients", force: :cascade do |t|
+    t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "frames", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -28,6 +34,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_10_041629) do
     t.integer "stock"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "client_id"
+    t.integer "frame_id"
+    t.integer "lens_id"
+    t.float "price"
+    t.string "currency"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_orders_on_client_id"
+    t.index ["frame_id"], name: "index_orders_on_frame_id"
+    t.index ["lens_id"], name: "index_orders_on_lens_id"
   end
 
   create_table "pricings", force: :cascade do |t|
